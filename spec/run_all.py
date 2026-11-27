@@ -2,8 +2,8 @@
 """
 Run every verification activity and write a results report.
 
-    python3 spec/run_all.py                 # default scopes (~10-20 min)
-    python3 spec/run_all.py --quick         # small scopes (~1 min)
+    python3 spec/run_all.py                 # default scopes (~8 min)
+    python3 spec/run_all.py --quick         # small scopes (~5 min, mutants dominate)
     python3 spec/run_all.py --smt2 out/     # also dump each obligation as SMT-LIB2
 
 Exit status is 0 iff

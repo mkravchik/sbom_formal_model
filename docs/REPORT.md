@@ -119,7 +119,61 @@ These are the actual results of `python3 spec/run_all.py`. The full output,
 with witness states and mutant counterexamples, is in
 `results/verification_results.md`.
 
-RESULTS_PLACEHOLDER
+**Obligations (reference model)**
+
+| obligation | result | time |
+|---|---|---|
+| O1 evidence soundness (traceable genuine support) | HOLDS | 0.0s |
+| O2 fabricated evidence is inert | HOLDS | 3.5s |
+| O3 AI interpretations never establish or defeat firm conclusions | HOLDS | 0.8s |
+| O4 evidence about one component does not establish another | HOLDS | 58.3s |
+| O5 slots are independent | HOLDS | 70.8s |
+| O6 accumulation never silently destroys knowledge | HOLDS | 5.4s |
+| O7 equivalent knowledge yields equal conclusions | HOLDS | 20.5s |
+| O7a adding a duplicate contribution changes nothing | HOLDS | 10.3s |
+| O8 retraction is precise (as-if-absent) | HOLDS | 3.7s |
+| O9 every contribution is revisable | HOLDS | 0.0s |
+| O10 every slot has exactly one honest status | HOLDS | 0.3s |
+
+**Witnesses**
+
+| witness | result | time |
+|---|---|---|
+| W1 one state shows all four statuses | WITNESSED | 0.2s |
+| W2 firm consolidation via a chain (transitivity) | WITNESSED | 0.2s |
+| W3 provisional (AI) merge propagates a value provisionally | WITNESSED | 0.2s |
+| W4 AI self-correction: Provisional -> Unknown by an AI retraction | WITNESSED | 0.3s |
+| W5 Established value contested by an AI claim (firm dominance) | WITNESSED | 0.2s |
+| W6 firm merge exposes a conflict | WITNESSED | 0.2s |
+| W7 human retraction of a Tool fact revises an Established value | WITNESSED | 0.2s |
+| W8 dependency lifted through a firm merge | WITNESSED | 0.3s |
+
+**Mutants (negative controls: each must be rejected)**
+
+| mutant | design error | violated obligations | detected |
+|---|---|---|---|
+| `ai_trusted` | AI interpretations count as firm (established) support | O1 COUNTEREXAMPLE, O3 COUNTEREXAMPLE | yes |
+| `no_integrity` | citations are not checked against the snapshot | O1 COUNTEREXAMPLE, O2 COUNTEREXAMPLE | yes |
+| `ai_retracts_all` | an AI retraction can defeat Tool and Human records | O3 COUNTEREXAMPLE | yes |
+| `atom_retract` | a retraction removes one record occurrence, not a content | O1 COUNTEREXAMPLE, O5 COUNTEREXAMPLE, O7 COUNTEREXAMPLE, O7a COUNTEREXAMPLE, O9 COUNTEREXAMPLE | yes |
+| `same_asym` | retracting Same(c,d) does not match the equivalent Same(d,c) | O1 COUNTEREXAMPLE, O7 COUNTEREXAMPLE, O7a COUNTEREXAMPLE, O9 COUNTEREXAMPLE | yes |
+| `mech_asym` | Tool Same validity depends on the orientation of the pair | O7 COUNTEREXAMPLE, O7a COUNTEREXAMPLE | yes |
+| `latest_wins` | a slot takes the value of the most recently added support | O6 COUNTEREXAMPLE, O7 COUNTEREXAMPLE, O7a COUNTEREXAMPLE, O10 COUNTEREXAMPLE | yes |
+| `majority` | a slot takes the value with the most supporting records | O6 COUNTEREXAMPLE, O7 COUNTEREXAMPLE, O7a COUNTEREXAMPLE | yes |
+| `containment` | claims about a nested component are inherited by its container | O1 COUNTEREXAMPLE, O4 COUNTEREXAMPLE | yes |
+| `name_merge` | hypotheses with an equal (possibly AI) name are merged automatically | O1 COUNTEREXAMPLE, O3 COUNTEREXAMPLE, O4 COUNTEREXAMPLE, O5 COUNTEREXAMPLE | yes |
+
+**Challenge cases** (`expect`: concrete status; `never`: bad outcome UNSAT under arbitrary AI additions; `mutant`: bad outcome SAT under a wrong design; `reachable`: documented behaviour is SAT)
+
+| case | passed | failed | expect | never | mutant | reachable |
+|---|---|---|---|---|---|---|
+| A conditional version | 15 | 0 | 11 | 3 | 1 | 0 |
+| B nested components | 12 | 0 | 9 | 2 | 1 | 0 |
+| C incorrect interpretation | 12 | 0 | 7 | 2 | 2 | 1 |
+| D revised component association | 14 | 0 | 11 | 2 | 1 | 0 |
+| E interrupted investigation | 10 | 0 | 7 | 2 | 0 | 1 |
+
+Runner: `Summary: ALL CHECKS PASSED (total 443s)`, exit status 0. The run used z3 5.4.1 on one core.
 
 ### 3.1 Verification bounds
 

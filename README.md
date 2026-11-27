@@ -35,9 +35,9 @@ python3 spec/run_all.py
 python3 spec/run_all.py --smt2 results/smt2
 ```
 
-- `--quick` uses small scopes and takes about 1 minute.
+- `--quick` uses small scopes and takes about 5 minutes.
 - Running with no flags uses the scopes reported in `docs/REPORT.md`. It
-  takes about 15–25 minutes on one core.
+  takes about 8 minutes on one core.
 - `--smt2 results/smt2` also writes every obligation as an SMT-LIB2 file. Each
   file is expected to return `unsat`, so the results can be cross-checked with
   another solver such as cvc5.
